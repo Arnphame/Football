@@ -10,9 +10,6 @@ include 'C:\xampp\htdocs\Football\config.php';
 class user
 {
     private $database;
-    private $name;
-    private $password;
-    private $role;
     public function __construct()
     {
         $this->database = new mysqli(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
@@ -22,20 +19,17 @@ class user
         }
     }
 
-    public function user_registration($name,$password)
+    public function user_registration($name, $email, $password)
     {
         $role = 1;
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-        if($this->check_availability($name)){
-            $prepare = $this->database->prepare("INSERT INTO users (name, password, role) 
-                      VALUES (?, ?, ?)");
-            $prepare->bind_param("ssi", $name, $hashed_password, $role);
+            $prepare = $this->database->prepare("INSERT INTO users (name, email, password, role) 
+                      VALUES (?, ?, ?, ?)");
+            $prepare->bind_param("sssi", $name, $email, $hashed_password, $role);
             if($prepare->execute()){
                 return $prepare;
             }
             else return false;
-        }
-        else return false;
     }
 
     public function check_availability($name)
@@ -43,6 +37,7 @@ class user
         $prepare = $this->database->prepare("SELECT * FROM users where name = ?");
         $prepare->bind_param("s",$name);
         $prepare->execute() or die(mysqli_connect_errno() . "Name availability cannot be checked");
+        $prepare->store_result();
         if($prepare->num_rows == 0)
             return true;
         else return false;
@@ -73,24 +68,56 @@ class user
      * 1 - user
      * 2 - admin
      */
-    public function get_role()
+    public function getUser($id)
     {
-        $prepare = $this->database->prepare("SELECT role FROM users where name = ?");
-        $prepare->bind_param("s",$this->name);
-        $prepare->execute() or die(mysqli_connect_errno() . "Cannot get user role");
-        $result = $prepare->get_result();
-        $row = mysqli_fetch_array(($result));
-        return $row['role'];
+        $prepare = $this->database->prepare("SELECT id, email, name, role FROM users where id = ?");
+        $prepare->bind_param("i", $id);
+        $prepare->execute() or die(mysqli_connect_errno() . "Cannot get user");
+        if($prepare) {
+            $result = $prepare->get_result();
+            return $result;
+        }
+        else return false;
     }
-
-   /* public function get_session()
+    public function getUserByEmail($email)
     {
-        return $_SESSION['user_login'];
-    }*/
+        $prepare = $this->database->prepare("SELECT name FROM users where email = ?");
+        $prepare->bind_param("s", $email);
+        $prepare->execute() or die(mysqli_connect_errno() . "Cannot get user");
+        if($prepare) {
+            $result = $prepare->get_result();
+            return $result;
+        }
+        else return false;
+    }
 
     public function user_logout()
     {
         $_SESSION['user_login'] = FALSE;
         session_destroy();
+    }
+
+    public function check_email($email)
+    {
+        $prepare = $this->database->prepare("SELECT * FROM users where email = ?");
+        $prepare->bind_param("s",$email);
+        $prepare->execute() or die(mysqli_connect_errno() . "Cannot get user");
+        $prepare->store_result();
+        if($prepare->num_rows == 1)
+            return true;
+        else return false;
+    }
+
+    public function set_token($email)
+    {
+        if ($this->check_email($email)) {
+            $token = md5(uniqid($email, true));
+            $prepare = $this->database->prepare("UPDATE users SET token = ? WHERE email = ?");
+            $prepare->bind_param("ss", $token, $email);
+            if ($prepare->execute())
+                return $prepare;
+            else return false;
+        }
+        return false;
     }
 }

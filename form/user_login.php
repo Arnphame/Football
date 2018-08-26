@@ -11,12 +11,12 @@ else
     $errMsg = $_SESSION['error'];
 ?>
     <html>
-    <link href="vendor/custom_css/style.css" rel="stylesheet">
-    <body style="background: url(vendor/img/photo-1473976345543-9ffc928e648d.jpg) no-repeat center center fixed; background-size: cover;">
+    <link href="../vendor/custom_css/style.css" rel="stylesheet">
+    <body style="background: url(../vendor/img/photo-1473976345543-9ffc928e648d.jpg) no-repeat center center fixed; background-size: cover;">
     <div class="vertical-center">
         <div class="container col-lg-3 centered" style="padding: 10px; background-color: rgba(0,0,0,0.8)">
             <h2 class="text-center" style="color: white">Login</h2>
-            <form method="post" action="authentication.php" name="auth">
+            <form method="post" action="../module/authentication.php" name="auth">
                 <div class="form-group" style="color: white">
                     <label for="username">Login Name</label>
                     <input class="form-control" id="login" name="login" type="text" placeholder="Enter user name here" required>

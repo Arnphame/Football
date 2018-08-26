@@ -1,4 +1,4 @@
-<?php include 'class/user.php';
+<?php include '../class/user.php';
 $user = new user(); ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,8 +11,8 @@ $user = new user(); ?>
     <meta name="author" content="">
 
     <title>Football</title>
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="vendor/custom_css/style.css" rel="stylesheet">
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../vendor/custom_css/style.css" rel="stylesheet">
 
 </head>
 
@@ -59,10 +59,14 @@ $user = new user(); ?>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="user_logout.php">Logout</a>
+                        <a class="nav-link" href="../module/user_logout.php">Logout</a>
                     </li>
                 </ul>
             </div>
+        </div>
+        <div class="text-right float-right">
+            <?php $row = mysqli_fetch_assoc(($user->getUser($_SESSION['user_id'])));
+            echo "Logged in as " . $row['name']; ?>
         </div>
     </nav>
 <?php } ?>

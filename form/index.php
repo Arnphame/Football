@@ -8,14 +8,6 @@ if(!empty($_SESSION['success']))
         <?php echo $_SESSION['success'];
         $_SESSION['success'] = "";?>
     </div>
-<?php }
-if(!empty($_SESSION['error']))
-{?>
-    <div class="alert" id="alert">
-        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-        <?php echo $_SESSION['error'];
-        $_SESSION['error'] = ""; ?>
-    </div>
 <?php } ?>
 
     <!-- Page Content -->
@@ -25,8 +17,7 @@ if(!empty($_SESSION['error']))
             <h1>
             <?php
             if(!empty($_SESSION['user_login'])){
-                echo "Prisijungiau";
-                echo $_SESSION['user_id'];
+                echo "Welcome";
             }
             else{
             ?>
