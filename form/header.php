@@ -1,4 +1,5 @@
 <?php include '../class/user.php';
+      include '../class/match.php';
 $user = new user(); ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -58,6 +59,12 @@ $user = new user(); ?>
                             <span class="sr-only">(current)</span>
                         </a>
                     </li>
+                    <?php $row = mysqli_fetch_assoc(($user->getUser($_SESSION['user_id'])));
+                    if($row['role'] == 2) echo "<li class=\"nav-item\">
+                        <a class=\"nav-link\" href=\"index.php\">Create match
+                        </a>
+                    </li>"
+                    ?>
                     <li class="nav-item">
                         <a class="nav-link" href="../module/user_logout.php">Logout</a>
                     </li>

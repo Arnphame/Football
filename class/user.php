@@ -6,7 +6,7 @@
  * Time: 16:11
  */
 
-include 'C:\xampp\htdocs\Football\config.php';
+include_once 'C:\xampp\htdocs\Football\config.php';
 class user
 {
     private $database;
